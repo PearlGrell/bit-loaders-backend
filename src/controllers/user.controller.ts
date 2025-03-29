@@ -192,8 +192,12 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
             data: user
         });
 
+        const token = sign(user.id!);
+
         return respond({
             message: "OTP sent to your email",
+            label: "token",
+            data: token,
             status_code: 200
         }, res);
     }
