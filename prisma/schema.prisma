@@ -65,3 +65,14 @@ model subscription {
 
   @@index([user_id])
 }
+
+model reminder_logs {
+  id              String       @id @default(uuid())
+  user_id         String
+  subscription_id String
+  alert_type      alert_type
+  sent_at         DateTime     @default(now())
+
+  @@index([user_id])
+  @@index([subscription_id])
+}
