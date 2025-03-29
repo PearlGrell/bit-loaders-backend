@@ -77,6 +77,41 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+export async function searchUser(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { name, email } = req.query;
+
+        console.log(name, email);
+
+        if (!name && !email) {
+            return next(new StatusError(400, "Name or email is required"));
+        }
+
+        const users = await client.user.findMany({
+            where: {
+                OR: [
+                    { name: { contains: name as string, mode: "insensitive" } },
+                    { email: { contains: email as string, mode: "insensitive" } }
+                ]
+            }
+        });
+
+        if (users.length === 0) {
+            return next(new StatusError(404, "No users found"));
+        }
+
+        return respond({
+            message: "Users found",
+            status_code: 200,
+            label: "users",
+            data: users
+        }, res);
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
 export async function createUser(req: Request, res: Response, next: NextFunction) {
     try {
         const { name, email, password } = req.body;
@@ -196,7 +231,7 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
 
         return respond({
             message: "OTP sent to your email",
-            label: "token",
+            label: "authtoken",
             data: token,
             status_code: 200
         }, res);

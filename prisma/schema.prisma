@@ -65,29 +65,3 @@ model subscription {
 
   @@index([user_id])
 }
-
-model payment {
-  id              String         @id @default(uuid())
-  user_id         String
-  subscription_id String
-  amount          Decimal
-  transaction_date DateTime      @default(now())
-  status          payment_status
-  created_at      DateTime       @default(now())
-
-  @@index([user_id])
-  @@index([subscription_id])
-}
-
-model alert {
-  id              String      @id @default(uuid())
-  user_id         String
-  subscription_id String
-  alert_type      alert_type
-  alert_date      DateTime
-  sent            Boolean    @default(false)
-  created_at      DateTime   @default(now())
-
-  @@index([user_id])
-  @@index([subscription_id])
-}

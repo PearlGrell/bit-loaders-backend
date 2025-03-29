@@ -4,17 +4,13 @@ import path from 'node:path';
 import { settings } from '../config/settings';
 
 const mode = {
-    registration: 'registration.html',
-    forgot_password: 'forgot_password.html',
-    resendOTP: 'resend_otp.html',
+    forgot_password: 'forgot_password.html'
 }
 
 export type template = keyof typeof mode;
 
 export type params = {
-    registration: { otp: string, firstname: string, username: string, password: string };
     forgot_password: { otp: string, firstname: string };
-    resendOTP: { otp: string, firstname: string };
 };
 
 type mail = {
@@ -34,10 +30,10 @@ const sendMail = async ({ to, template, ...props }: mail) => {
         const mailOptions: SendMailOptions = {
             from: {
                 name: 'SubManager',
-                address: "noreply@sayble",
+                address: "noreply@submanager",
             },
             to,
-            subject: `${(template === 'registration') ? "Thank You For Registering" : (template === 'forgot_password') ? "Reset Password" : "Resend OTP"}`,
+            subject: "Reset Password",
             html: updatedHtmlContent,
             date: new Date(),
             encoding: 'utf8',
